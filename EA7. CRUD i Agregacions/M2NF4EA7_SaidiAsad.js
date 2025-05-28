@@ -82,7 +82,7 @@ db.people.insertOne({
     "friends" : [
         {
             "id" : 1,
-            "name" : "Mariah Campbell"
+            "name" : "Mariah Campbell
         },
         {
             "id": 2,
