@@ -16,6 +16,21 @@
 - [13. Eliminación de Datos](#13-eliminación-de-datos)
 - [14. Actualización de Datos](#14-actualización-de-datos)
 - [15. Operaciones de Agregación](#15-operaciones-de-agregación)
+  - [15.1. Estructura general](#151-estructura-general)
+  - [15.2. Etapas principales](#152-etapas-principales)
+    - [15.2.1. `$match` – Filtrar documentos](#1521-match--filtrar-documentos)
+    - [15.2.2. `$project` – Seleccionar y transformar campos](#1522-project--seleccionar-y-transformar-campos)
+    - [15.2.3. `$group` – Agrupar y calcular agregados](#1523-group--agrupar-y-calcular-agregados)
+    - [15.2.4. `$sort` – Ordenar resultados](#1524-sort--ordenar-resultados)
+    - [15.2.5. `$limit` – Limitar número de documentos](#1525-limit--limitar-número-de-documentos)
+    - [15.2.6. `$skip` – Omitir los primeros N documentos](#1526-skip--omitir-los-primeros-n-documentos)
+    - [15.2.7. `$count` – Contar documentos](#1527-count--contar-documentos)
+    - [15.2.8. `$addFields` – Añadir o modificar campos](#1528-addfields--añadir-o-modificar-campos)
+    - [15.2.9. `$unwind` – Descomponer arrays en documentos individuales](#1529-unwind--descomponer-arrays-en-documentos-individuales)
+    - [15.2.10. `$lookup` – Realizar join con otra colección](#15210-lookup--realizar-join-con-otra-colección)
+    - [15.2.11. `$out` – Guardar resultados en una colección nueva o existente](#15211-out--guardar-resultados-en-una-colección-nueva-o-existente)
+  - [15.3. Ejemplo completo](#153-ejemplo-completo)
+
 
 ## 1. Consultas Básicas con `find`
 **Explicación**: Busca documentos en una colección. Puede incluir filtros (consulta) y proyección (campos a mostrar). Sin parámetros, muestra los primeros 20 documentos. Usa `.pretty()` para un formato legible.
