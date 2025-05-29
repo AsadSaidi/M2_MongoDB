@@ -123,3 +123,9 @@ db.people.find(
 
 //Exercici 3. Actualitzacions
 //a) Afegeix un nou camp anomenat "longitude" a totes les persones que en la seva adreça contingui la paraula "Berkeley". El valor d'aquest nou camp serà de 1. Has de tenir en compte el case sensitive.
+db.people.updateMany(
+    {address: /Berkeley/i},
+    {$set: {longitude: 1}}
+)
+
+db.people.find({"address" : /Berkeley/i}).pretty();
