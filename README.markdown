@@ -303,6 +303,169 @@ db.people.aggregate([
 { "_id": "TechCorp", "num_people": 1 }
 { "_id": "DataInc", "num_people": 1 }
 ```
+Aquí tienes un resumen completo, listo para pegar en tu documento de Drive, con las principales etapas del método `aggregate` de MongoDB y ejemplos claros para cada una:
+
+---
+
+# 🧩 MongoDB – Resumen completo del método `aggregate()`
+
+El método `.aggregate()` permite procesar y transformar documentos mediante una serie de etapas llamadas **pipeline stages**. Es útil para análisis complejos, agregaciones, transformaciones y joins.
+
+---
+
+## 🔄 Estructura general
+
+```js
+db.coleccion.aggregate([
+  { <etapa 1> },
+  { <etapa 2> },
+  ...
+])
+```
+
+---
+
+## Etapas principales
+
+### 1. `$match` – Filtrar documentos (como `find()`)
+
+Filtra los documentos que cumplen la condición.
+
+```js
+{ $match: { edad: { $gte: 18 } } }
+```
+
+---
+
+### 2. `$project` – Seleccionar y transformar campos
+
+Permite mostrar/ocultar campos y crear nuevos campos calculados.
+
+```js
+{
+  $project: {
+    nombre_completo: { $concat: ["$nombre", " ", "$apellido"] },
+    edad: 1,
+    _id: 0
+  }
+}
+```
+
+---
+
+### 3. `$group` – Agrupar y calcular agregados
+
+Agrupa documentos según un campo y calcula sumas, promedios, etc.
+
+```js
+{
+  $group: {
+    _id: "$ciudad",
+    totalEstudiantes: { $sum: 1 },
+    edadPromedio: { $avg: "$edad" }
+  }
+}
+```
+
+---
+
+### 4. `$sort` – Ordenar resultados
+
+```js
+{ $sort: { edad: -1 } } // Orden descendente por edad
+```
+
+---
+
+### 5. `$limit` – Limitar número de documentos
+
+```js
+{ $limit: 10 }
+```
+
+---
+
+### 6. `$skip` – Omitir los primeros N documentos
+
+```js
+{ $skip: 5 }
+```
+
+---
+
+### 7. `$count` – Contar documentos
+
+Cuenta y devuelve el total de documentos que pasan el pipeline.
+
+```js
+{ $count: "total" }
+```
+
+---
+
+### 8. `$addFields` – Añadir o modificar campos
+
+Añade nuevos campos o modifica existentes.
+
+```js
+{
+  $addFields: {
+    nombre_completo: { $concat: ["$nombre", " ", "$apellido"] }
+  }
+}
+```
+
+---
+
+### 9. `$unwind` – Descomponer arrays en documentos individuales
+
+Convierte un documento con array en varios documentos, uno por cada elemento.
+
+```js
+{ $unwind: "$cursos" }
+```
+
+---
+
+### 10. `$lookup` – Realizar join con otra colección
+
+Une documentos de otra colección.
+
+```js
+{
+  $lookup: {
+    from: "cursos",
+    localField: "curso_id",
+    foreignField: "_id",
+    as: "detalleCurso"
+  }
+}
+```
+
+---
+
+### 11. `$out` – Guardar resultados en una colección nueva o existente
+
+```js
+{ $out: "resultado" }
+```
+
+---
+
+## Ejemplo completo
+
+```js
+db.students.aggregate([
+  { $match: { edad: { $gte: 18 } } },
+  { $group: { _id: "$ciudad", promedioEdad: { $avg: "$edad" } } },
+  { $sort: { promedioEdad: -1 } },
+  { $limit: 5 }
+])
+```
+
+---
+
+Si quieres, puedo ayudarte a ampliar con ejemplos de operadores específicos dentro del pipeline o funciones avanzadas. ¿Te gustaría?
 
 ## Notas
 - **Proyección**: Usa `1` para mostrar campos, `0` para excluirlos. `_id` se muestra por defecto a menos que se excluya.
