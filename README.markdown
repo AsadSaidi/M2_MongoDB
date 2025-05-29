@@ -145,16 +145,22 @@ db.people.find({ $expr: { $gt: ["$age", 30] } }, { name: 1, age: 1, _id: 0 }).pr
 ## 7. Operadores de Actualización
 **Explicación**: Modifican documentos existentes en la colección.
 
-| Operador | Descripción | Ejemplo |
-|----------|-------------|---------|
-| `$set` | Establece un valor | `db.people.updateOne({ name: "Lauren Hailey" }, { $set: { age: 35 } })` |
-| `$unset` | Elimina un campo | `db.people.updateOne({ name: "Lauren Hailey" }, { $unset: { company: "" } })` |
-| `$inc` | Incrementa un valor | `db.people.updateOne({ name: "Lauren Hailey" }, { $inc: { age: 1 } })` |
-| `$mul` | Multiplica un valor | `db.people.updateOne({ name: "Lauren Hailey" }, { $mul: { age: 2 } })` |
-| `$rename` | Renombra un campo | `db.people.updateOne({ name: "Lauren Hailey" }, { $rename: { company: "empresa" } })` |
-| `$push` | Añade a un array | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: "nuevo" } })` |
-| `$pull` | Elimina de un array | `db.people.updateOne({ name: "Lauren Hailey" }, { $pull: { tags: "sunt" } })` |
-| `$addToSet` | Añade si no existe | `db.people.updateOne({ name: "Lauren Hailey" }, { $addToSet: { tags: "nuevo" } })` |
+| **Operador**     | **Descripción**                                                                 | **Ejemplo** |
+|------------------|----------------------------------------------------------------------------------|-------------|
+| `$set`           | Establece un valor específico en un campo                                       | `db.people.updateOne({ name: "Lauren Hailey" }, { $set: { age: 35 } })` |
+| `$unset`         | Elimina un campo del documento                                                   | `db.people.updateOne({ name: "Lauren Hailey" }, { $unset: { company: "" } })` |
+| `$inc`           | Incrementa un valor numérico                                                     | `db.people.updateOne({ name: "Lauren Hailey" }, { $inc: { age: 1 } })` |
+| `$mul`           | Multiplica un valor numérico                                                     | `db.people.updateOne({ name: "Lauren Hailey" }, { $mul: { age: 2 } })` |
+| `$rename`        | Renombra un campo                                                                | `db.people.updateOne({ name: "Lauren Hailey" }, { $rename: { company: "empresa" } })` |
+| `$push`          | Añade un elemento al final de un array                                           | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: "nuevo" } })` |
+| `$pop`           | Elimina el primer (`-1`) o último (`1`) elemento de un array                     | `db.people.updateOne({ name: "Lauren Hailey" }, { $pop: { tags: 1 } })` |
+| `$pull`          | Elimina elementos que coincidan con el valor dado en un array                    | `db.people.updateOne({ name: "Lauren Hailey" }, { $pull: { tags: "sunt" } })` |
+| `$addToSet`      | Añade un valor a un array solo si no está presente                               | `db.people.updateOne({ name: "Lauren Hailey" }, { $addToSet: { tags: "nuevo" } })` |
+| `$each`          | Se usa junto con `$push` o `$addToSet` para insertar múltiples elementos         | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: { $each: ["a", "b"] } } })` |
+| `$position`      | Define la posición en la que insertar un elemento con `$push`                    | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: { $each: ["x"], $position: 0 } } })` |
+| `$slice`         | Se usa con `$push` para limitar el tamaño del array resultante                   | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: { $each: ["nuevo"], $slice: -3 } } })` |
+| `$sort`          | Se usa con `$push` para ordenar elementos al agregarlos                          | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: { $each: ["b", "a"], $sort: 1 } } })` |
+
 
 ## 8. Operador `$mod`
 **Explicación**: Verifica si un número es divisible por otro, útil para pares/impares.
