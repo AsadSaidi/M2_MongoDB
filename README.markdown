@@ -16,20 +16,6 @@
 - [13. Eliminación de Datos](#13-eliminación-de-datos)
 - [14. Actualización de Datos](#14-actualización-de-datos)
 - [15. Operaciones de Agregación](#15-operaciones-de-agregación)
-  - [15.1. Estructura general](#151-estructura-general)
-  - [15.2. Etapas principales](#152-etapas-principales)
-    - [15.2.1. `$match` – Filtrar documentos](#1521-match--filtrar-documentos)
-    - [15.2.2. `$project` – Seleccionar y transformar campos](#1522-project--seleccionar-y-transformar-campos)
-    - [15.2.3. `$group` – Agrupar y calcular agregados](#1523-group--agrupar-y-calcular-agregados)
-    - [15.2.4. `$sort` – Ordenar resultados](#1524-sort--ordenar-resultados)
-    - [15.2.5. `$limit` – Limitar número de documentos](#1525-limit--limitar-número-de-documentos)
-    - [15.2.6. `$skip` – Omitir los primeros N documentos](#1526-skip--omitir-los-primeros-n-documentos)
-    - [15.2.7. `$count` – Contar documentos](#1527-count--contar-documentos)
-    - [15.2.8. `$addFields` – Añadir o modificar campos](#1528-addfields--añadir-o-modificar-campos)
-    - [15.2.9. `$unwind` – Descomponer arrays en documentos individuales](#1529-unwind--descomponer-arrays-en-documentos-individuales)
-    - [15.2.10. `$lookup` – Realizar join con otra colección](#15210-lookup--realizar-join-con-otra-colección)
-    - [15.2.11. `$out` – Guardar resultados en una colección nueva o existente](#15211-out--guardar-resultados-en-una-colección-nueva-o-existente)
-  - [15.3. Ejemplo completo](#153-ejemplo-completo)
 
 ## 1. Consultas Básicas con `find`
 **Explicación**: Busca documentos en una colección. Puede incluir filtros (consulta) y proyección (campos a mostrar). Sin parámetros, muestra los primeros 20 documentos. Usa `.pretty()` para un formato legible.
@@ -159,21 +145,16 @@ db.people.find({ $expr: { $gt: ["$age", 30] } }, { name: 1, age: 1, _id: 0 }).pr
 ## 7. Operadores de Actualización
 **Explicación**: Modifican documentos existentes en la colección.
 
-| **Operador**     | **Descripción**                                                                 | **Ejemplo** |
-|------------------|----------------------------------------------------------------------------------|-------------|
-| `$set`           | Establece un valor específico en un campo                                       | `db.people.updateOne({ name: "Lauren Hailey" }, { $set: { age: 35 } })` |
-| `$unset`         | Elimina un campo del documento                                                   | `db.people.updateOne({ name: "Lauren Hailey" }, { $unset: { company: "" } })` |
-| `$inc`           | Incrementa un valor numérico                                                     | `db.people.updateOne({ name: "Lauren Hailey" }, { $inc: { age: 1 } })` |
-| `$mul`           | Multiplica un valor numérico                                                     | `db.people.updateOne({ name: "Lauren Hailey" }, { $mul: { age: 2 } })` |
-| `$rename`        | Renombra un campo                                                                | `db.people.updateOne({ name: "Lauren Hailey" }, { $rename: { company: "empresa" } })` |
-| `$push`          | Añade un elemento al final de un array                                           | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: "nuevo" } })` |
-| `$pop`           | Elimina el primer (`-1`) o último (`1`) elemento de un array                     | `db.people.updateOne({ name: "Lauren Hailey" }, { $pop: { tags: 1 } })` |
-| `$pull`          | Elimina elementos que coincidan con el valor dado en un array                    | `db.people.updateOne({ name: "Lauren Hailey" }, { $pull: { tags: "sunt" } })` |
-| `$addToSet`      | Añade un valor a un array solo si no está presente                               | `db.people.updateOne({ name: "Lauren Hailey" }, { $addToSet: { tags: "nuevo" } })` |
-| `$each`          | Se usa junto con `$push` o `$addToSet` para insertar múltiples elementos         | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: { $each: ["a", "b"] } } })` |
-| `$position`      | Define la posición en la que insertar un elemento con `$push`                    | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: { $each: ["x"], $position: 0 } } })` |
-| `$slice`         | Se usa con `$push` para limitar el tamaño del array resultante                   | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: { $each: ["nuevo"], $slice: -3 } } })` |
-| `$sort`          | Se usa con `$push` para ordenar elementos al agregarlos                          | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: { $each: ["b", "a"], $sort: 1 } } })` |
+| Operador | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `$set` | Establece un valor | `db.people.updateOne({ name: "Lauren Hailey" }, { $set: { age: 35 } })` |
+| `$unset` | Elimina un campo | `db.people.updateOne({ name: "Lauren Hailey" }, { $unset: { company: "" } })` |
+| `$inc` | Incrementa un valor | `db.people.updateOne({ name: "Lauren Hailey" }, { $inc: { age: 1 } })` |
+| `$mul` | Multiplica un valor | `db.people.updateOne({ name: "Lauren Hailey" }, { $mul: { age: 2 } })` |
+| `$rename` | Renombra un campo | `db.people.updateOne({ name: "Lauren Hailey" }, { $rename: { company: "empresa" } })` |
+| `$push` | Añade a un array | `db.people.updateOne({ name: "Lauren Hailey" }, { $push: { tags: "nuevo" } })` |
+| `$pull` | Elimina de un array | `db.people.updateOne({ name: "Lauren Hailey" }, { $pull: { tags: "sunt" } })` |
+| `$addToSet` | Añade si no existe | `db.people.updateOne({ name: "Lauren Hailey" }, { $addToSet: { tags: "nuevo" } })` |
 
 ## 8. Operador `$mod`
 **Explicación**: Verifica si un número es divisible por otro, útil para pares/impares.
@@ -429,6 +410,169 @@ db.students.aggregate([
   { $limit: 5 }
 ])
 ```
+Aquí tienes un resumen completo, listo para pegar en tu documento de Drive, con las principales etapas del método `aggregate` de MongoDB y ejemplos claros para cada una:
+
+---
+
+# 🧩 MongoDB – Resumen completo del método `aggregate()`
+
+El método `.aggregate()` permite procesar y transformar documentos mediante una serie de etapas llamadas **pipeline stages**. Es útil para análisis complejos, agregaciones, transformaciones y joins.
+
+---
+
+## 🔄 Estructura general
+
+```js
+db.coleccion.aggregate([
+  { <etapa 1> },
+  { <etapa 2> },
+  ...
+])
+```
+
+---
+
+## Etapas principales
+
+### 1. `$match` – Filtrar documentos (como `find()`)
+
+Filtra los documentos que cumplen la condición.
+
+```js
+{ $match: { edad: { $gte: 18 } } }
+```
+
+---
+
+### 2. `$project` – Seleccionar y transformar campos
+
+Permite mostrar/ocultar campos y crear nuevos campos calculados.
+
+```js
+{
+  $project: {
+    nombre_completo: { $concat: ["$nombre", " ", "$apellido"] },
+    edad: 1,
+    _id: 0
+  }
+}
+```
+
+---
+
+### 3. `$group` – Agrupar y calcular agregados
+
+Agrupa documentos según un campo y calcula sumas, promedios, etc.
+
+```js
+{
+  $group: {
+    _id: "$ciudad",
+    totalEstudiantes: { $sum: 1 },
+    edadPromedio: { $avg: "$edad" }
+  }
+}
+```
+
+---
+
+### 4. `$sort` – Ordenar resultados
+
+```js
+{ $sort: { edad: -1 } } // Orden descendente por edad
+```
+
+---
+
+### 5. `$limit` – Limitar número de documentos
+
+```js
+{ $limit: 10 }
+```
+
+---
+
+### 6. `$skip` – Omitir los primeros N documentos
+
+```js
+{ $skip: 5 }
+```
+
+---
+
+### 7. `$count` – Contar documentos
+
+Cuenta y devuelve el total de documentos que pasan el pipeline.
+
+```js
+{ $count: "total" }
+```
+
+---
+
+### 8. `$addFields` – Añadir o modificar campos
+
+Añade nuevos campos o modifica existentes.
+
+```js
+{
+  $addFields: {
+    nombre_completo: { $concat: ["$nombre", " ", "$apellido"] }
+  }
+}
+```
+
+---
+
+### 9. `$unwind` – Descomponer arrays en documentos individuales
+
+Convierte un documento con array en varios documentos, uno por cada elemento.
+
+```js
+{ $unwind: "$cursos" }
+```
+
+---
+
+### 10. `$lookup` – Realizar join con otra colección
+
+Une documentos de otra colección.
+
+```js
+{
+  $lookup: {
+    from: "cursos",
+    localField: "curso_id",
+    foreignField: "_id",
+    as: "detalleCurso"
+  }
+}
+```
+
+---
+
+### 11. `$out` – Guardar resultados en una colección nueva o existente
+
+```js
+{ $out: "resultado" }
+```
+
+---
+
+## Ejemplo completo
+
+```js
+db.students.aggregate([
+  { $match: { edad: { $gte: 18 } } },
+  { $group: { _id: "$ciudad", promedioEdad: { $avg: "$edad" } } },
+  { $sort: { promedioEdad: -1 } },
+  { $limit: 5 }
+])
+```
+
+---
+
+Si quieres, puedo ayudarte a ampliar con ejemplos de operadores específicos dentro del pipeline o funciones avanzadas. ¿Te gustaría?
 
 ## Notas
 - **Proyección**: Usa `1` para mostrar campos, `0` para excluirlos. `_id` se muestra por defecto a menos que se excluya.
